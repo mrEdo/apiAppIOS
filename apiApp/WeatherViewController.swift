@@ -36,6 +36,13 @@ class WeatherViewController: UIViewController {
         weatherText.text = weatherViewText
         
         let apiString = "https://api.letsbuildthatapp.com/jsondecodable/website_description"
+        
+        /*
+         var request = URLRequest(url: url)
+         request.setValue("secret-keyValue", forHTTPHeaderField: "secret-key")
+         
+         URLSession.shared.dataTask(with: request) { data, response, error in }
+        */
         guard let url = URL(string:apiString) else
             { return }
         
@@ -46,7 +53,7 @@ class WeatherViewController: UIViewController {
             do {
                 let course = try JSONDecoder().decode(AdvancedCourse.self, from: courseData)
                 //let course = try JSONDecoder().decode([Course].self, from: courseData)
-                }
+                
                 print(course.courses[1].name)
             } catch let jsonErr {
                 print("You've got the following jsonError \(jsonErr)")
