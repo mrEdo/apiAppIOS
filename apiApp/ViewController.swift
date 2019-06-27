@@ -21,6 +21,10 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+//    @IBAction func unwindToRootViewController(segue: UIStoryboardSegue) {
+//        print("Unwind to Root View Controller")
+//    }
+    
     @IBAction func getWeather(_ sender: Any) {
         performSegue(withIdentifier: "weatherSegue", sender: self)
         //self.inputText = self.textfield.text!
@@ -30,7 +34,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let wv = segue.destination as! WeatherViewController
         //wv.weatherViewText = self.inputText
-        wv.weatherViewText = self.textfield.text!
+        wv.stateInfo = self.textfield.text!
     }
 }
 

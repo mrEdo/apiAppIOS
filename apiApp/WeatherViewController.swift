@@ -8,53 +8,88 @@
 
 import UIKit
 
-struct AdvancedCourse:Decodable {
-    let name:String
+//struct AdvancedCourse:Decodable {
+//    let name:String
+//    let description:String
+//    let courses: [Course]
+//}
+//struct Course:Decodable {
+//    let id:Int
+//    let name:String
+//    let link:String
+//    let imageUrl:String
+//}
+struct StateInfo:Decodable {
+    let status:String
+    let copyright:String
+    let congress:Int
+    let num_results:Int
+    let state:String
+    let results:[Nominee]
+}
+struct Nominee:Decodable {
+    let id:String
+    let uri:String
+    let date_received:String
     let description:String
-    let courses: [Course]
+    let nominee_state:String
+    let committee:String
+    let latest_action_date:String
+    let status:String
 }
-struct Course:Decodable {
-    let id:Int
-    let name:String
-    let link:String
-    let imageUrl:String
-}
-
-
 class WeatherViewController: UIViewController {
 
     // First URL
 
+    var stateInfo = ""
+    var nominees:[Nominee] = []
     
-   
-    var weatherViewText = ""
     
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var status: UILabel!
+    @IBOutlet weak var copyright: UILabel!
+    @IBOutlet weak var congress: UILabel!
+    @IBOutlet weak var numResults: UILabel!
+    @IBOutlet weak var state: UILabel!
     @IBOutlet weak var weatherText: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        weatherText.text = weatherViewText
+        weatherText.text = "You searched for Nominees in \(stateInfo)"
         
-        let apiString = "https://api.letsbuildthatapp.com/jsondecodable/website_description"
+        let apiString = "https://api.propublica.org/congress/v1/115/nominees/state/\(stateInfo).json"
         
-        /*
-         var request = URLRequest(url: url)
-         request.setValue("secret-keyValue", forHTTPHeaderField: "secret-key")
-         
-         URLSession.shared.dataTask(with: request) { data, response, error in }
-        */
         guard let url = URL(string:apiString) else
             { return }
+        var request = URLRequest(url: url)
         
-        URLSession.shared.dataTask(with: url){(data, response, err) in
+        request.setValue("IZEnyxkAoxMhJLkwJh55e4iWtPJQrXLBooo8j1hQ", forHTTPHeaderField: "X-API-Key")
+        
+        URLSession.shared.dataTask(with: request){(data, response, err) in
             
-            guard let courseData = data else {return}
+            guard let politicsData = data else {return}
             
             do {
-                let course = try JSONDecoder().decode(AdvancedCourse.self, from: courseData)
-                //let course = try JSONDecoder().decode([Course].self, from: courseData)
+                let pData = try JSONDecoder().decode(StateInfo.self, from: politicsData)
                 
-                print(course.courses[1].name)
+                self.nominees = pData.results
+                DispatchQueue.main.async {
+                    self.status.text = pData.status
+                    self.copyright.text = pData.copyright
+//                    self.copyright.lineBreakMode = NSLineBreakMode.byWordWrapping
+//                    self.copyright.sizeToFit()
+                    self.congress.text = String(pData.congress)
+                    print(self.congress.text)
+                    self.numResults.text = String(pData.num_results)
+                    self.state.text = pData.state
+                    //print("Nominees Are", self.nominees)
+                    self.tableView.dataSource = self
+                    self.tableView.delegate = self
+                    self.tableView.reloadData()
+                }
+                
+                
+                //print(pData)
             } catch let jsonErr {
                 print("You've got the following jsonError \(jsonErr)")
             }
@@ -74,4 +109,22 @@ class WeatherViewController: UIViewController {
     }
     */
 
+}
+extension WeatherViewController: UITableViewDelegate,UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.nominees.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")!
+        let cell = UITableViewCell(style: UITableViewCell.CellStyle.value2, reuseIdentifier: "cellId")
+
+        cell.detailTextLabel?.text = self.nominees[indexPath.row].committee
+        cell.textLabel?.text = self.nominees[indexPath.row].description
+        return cell
+    }
 }
