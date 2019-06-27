@@ -28,7 +28,7 @@
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" cocoaTouchSystemColor="darkTextColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H26-4N-ZvJ">
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Testing" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H26-4N-ZvJ">
                                 <rect key="frame" x="20" y="341" width="374" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
@@ -59,6 +59,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="tSa-Oz-JHg"/>
                     <connections>
+                        <outlet property="textfield" destination="H26-4N-ZvJ" id="di2-Gl-oga"/>
                         <segue destination="CTf-f9-vsv" kind="show" identifier="weatherSegue" id="hkO-Ik-Xp2"/>
                     </connections>
                 </viewController>

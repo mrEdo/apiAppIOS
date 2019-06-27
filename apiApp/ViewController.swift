@@ -12,7 +12,9 @@ class ViewController: UIViewController {
     
     var inputText = ""
 
-    @IBOutlet weak var weatherInput: UITextField!
+   
+    @IBOutlet weak var textfield: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,12 +23,14 @@ class ViewController: UIViewController {
 
     @IBAction func getWeather(_ sender: Any) {
         performSegue(withIdentifier: "weatherSegue", sender: self)
-        //self.inputText = weatherInput.text
+        //self.inputText = self.textfield.text!
+        //print(self.inputText)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var wv = segue.destination as! WeatherViewController
-        //wv.weatherViewText = self.weatherInput.text!
-         wv.weatherViewText = "This form the main controller"
+        let wv = segue.destination as! WeatherViewController
+        //wv.weatherViewText = self.inputText
+        wv.weatherViewText = self.textfield.text!
     }
 }
 

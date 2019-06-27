@@ -8,18 +8,52 @@
 
 import UIKit
 
+struct AdvancedCourse:Decodable {
+    let name:String
+    let description:String
+    let courses: [Course]
+}
+struct Course:Decodable {
+    let id:Int
+    let name:String
+    let link:String
+    let imageUrl:String
+}
+
+
 class WeatherViewController: UIViewController {
 
+    // First URL
+
+    
+   
     var weatherViewText = ""
     
     @IBOutlet weak var weatherText: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        weatherText.text = weatherViewText
         
-        weatherText.text = self.weatherViewText
-
-        // Do any additional setup after loading the view.
+        let apiString = "https://api.letsbuildthatapp.com/jsondecodable/website_description"
+        guard let url = URL(string:apiString) else
+            { return }
+        
+        URLSession.shared.dataTask(with: url){(data, response, err) in
+            
+            guard let courseData = data else {return}
+            
+            do {
+                let course = try JSONDecoder().decode(AdvancedCourse.self, from: courseData)
+                //let course = try JSONDecoder().decode([Course].self, from: courseData)
+                }
+                print(course.courses[1].name)
+            } catch let jsonErr {
+                print("You've got the following jsonError \(jsonErr)")
+            }
+            
+        }.resume()
+        
     }
     
 
